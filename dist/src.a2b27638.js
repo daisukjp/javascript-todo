@@ -176,6 +176,28 @@ module.hot.accept(reloadCSS);
 "use strict";
 
 require("./styles.css");
+var onClickAdd = function onClickAdd() {
+  var inputText = document.getElementById("add-text").value;
+  // getting value from text box and reset after pushed add button
+  document.getElementById("add-text").value = "";
+
+  // div生成
+  var div = document.createElement("div");
+  div.className = "list-row";
+
+  // li 生成
+  var li = document.createElement("li");
+  li.innerHTML = inputText;
+  // divのchildに各要素設定
+  div.appendChild(li);
+  console.log(div);
+
+  // add into incomplete list
+  document.getElementById("incomplete-list").appendChild(div);
+};
+document.getElementById("add-button").addEventListener("click", function () {
+  return onClickAdd();
+});
 },{"./styles.css":"src/styles.css"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -201,7 +223,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36369" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36657" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
