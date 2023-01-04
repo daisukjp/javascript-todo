@@ -176,24 +176,87 @@ module.hot.accept(reloadCSS);
 "use strict";
 
 require("./styles.css");
+//index.js
+
 var onClickAdd = function onClickAdd() {
+  //テキストボックスの値を取得し、初期化する
   var inputText = document.getElementById("add-text").value;
-  // getting value from text box and reset after pushed add button
   document.getElementById("add-text").value = "";
+  createIncompleteList(inputText);
+};
 
-  // div生成
-  var div = document.createElement("div");
-  div.className = "list-row";
+//未完了リストから指定の要素を削除
+var deleteFromIncompleteList = function deleteFromIncompleteList(target) {
+  document.getElementById("incomplete-list").removeChild(target);
+};
 
-  // li 生成
+// 未完了リストに追加する関数
+var createIncompleteList = function createIncompleteList(text) {
+  //li生成
   var li = document.createElement("li");
-  li.innerHTML = inputText;
-  // divのchildに各要素設定
-  div.appendChild(li);
-  console.log(div);
+  li.className = "list-row";
 
-  // add into incomplete list
-  document.getElementById("incomplete-list").appendChild(div);
+  //p生成
+  var p = document.createElement("p");
+  p.innerText = text;
+
+  //button（完了）タグ生成
+  var completeButton = document.createElement("button");
+  completeButton.innerText = "Done";
+  completeButton.addEventListener("click", function () {
+    //押された完了ボタンの親タグ（li）を未完了リストから削除
+    deleteFromIncompleteList(completeButton.parentNode);
+
+    //完了リストに追加する要素
+    var addTarget = completeButton.parentNode;
+
+    // TODO内容テキストを取得
+    var text = addTarget.firstElementChild.innerText;
+
+    //li以下を初期化
+    addTarget.textContent = null;
+
+    //p生成
+    var p = document.createElement("p");
+    p.innerText = text;
+
+    //button(戻す)タグ生成
+    var backButton = document.createElement("button");
+    backButton.innerText = "Bring Back";
+    backButton.addEventListener("click", function () {
+      //押された削除ボタンの親タグ（li）を完了リストから消去
+      var deleteTarget = backButton.parentNode;
+      document.getElementById("complete-list").removeChild(deleteTarget);
+
+      // TODOテキストを取得
+      var text = backButton.parentNode.firstElementChild.innerText;
+      createIncompleteList(text);
+    });
+
+    //liの子要素に各要素を設定
+    addTarget.appendChild(p);
+    addTarget.appendChild(backButton);
+    console.log(addTarget);
+
+    //完了リストに追加
+    document.getElementById("complete-list").appendChild(addTarget); //ここでエラー
+  });
+
+  //button（削除）タグ生成
+  var deleteButton = document.createElement("button");
+  deleteButton.innerText = "Delete";
+  deleteButton.addEventListener("click", function () {
+    //押された削除ボタンの親タグ（li）を未完了リストから削除
+    deleteFromIncompleteList(deleteButton.parentNode);
+  });
+
+  //liタグの子要素に各要素を設定
+  li.appendChild(p);
+  li.appendChild(completeButton);
+  li.appendChild(deleteButton);
+
+  //未完了のリストに追加
+  document.getElementById("incomplete-list").appendChild(li);
 };
 document.getElementById("add-button").addEventListener("click", function () {
   return onClickAdd();
@@ -223,7 +286,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "36657" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39251" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
